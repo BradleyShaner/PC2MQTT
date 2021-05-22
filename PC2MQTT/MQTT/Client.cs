@@ -171,10 +171,20 @@ namespace PC2MQTT.MQTT
         public MqttMessage Publish(MqttMessage mqttMessage)
         {
             // todo: Check for connectivity? Or QoS level if message will be retained
-            mqttMessage.messageId = client.Publish(mqttMessage.GetRawTopic(),
-                Encoding.UTF8.GetBytes(mqttMessage.message),
-                MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE,
-                mqttMessage.retain);
+            if (mqttMessage.GetRawMessage() == null || mqttMessage.GetRawMessage().Length == 0)
+            {
+                mqttMessage.messageId = client.Publish(mqttMessage.GetRawTopic(),
+                    Encoding.UTF8.GetBytes(mqttMessage.message),
+                    MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE,
+                    mqttMessage.retain);
+            } 
+            else
+            {
+                mqttMessage.messageId = client.Publish(mqttMessage.GetRawTopic(),
+                    mqttMessage.rawMessage,
+                    MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE,
+                    mqttMessage.retain);
+            }
 
             if (mqttMessage.messageId > 0) MessagePublished?.Invoke(mqttMessage);
 
@@ -216,6 +226,7 @@ namespace PC2MQTT.MQTT
                 .NewMessage()
                 .AddTopic(e.Topic)
                 .SetMessage(Encoding.UTF8.GetString(e.Message))
+                .SetRawMessage(e.Message)
                 .SetMessageType(MqttMessageType.MQTT_PUBLISH)
                 .Build();
 
