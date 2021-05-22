@@ -145,6 +145,7 @@ namespace PC2MQTT.MQTT
 
         public string deviceId = ExtensionMethods.Extensions.deviceId;
         public string message = "";
+        public byte[] rawMessage;
         public ushort messageId = 0;
         public MqttMessageType messageType = MqttMessageType.MQTT_NONE;
         public bool retain = false;
@@ -218,6 +219,15 @@ namespace PC2MQTT.MQTT
             return message;
         }
 
+        /// <summary>
+        /// Retrieves the <see cref="rawMessage"/> for this <see cref="MqttMessage"/>.
+        /// </summary>
+        /// <returns></returns>
+        public byte[] GetRawMessage()
+        {
+            return rawMessage;
+        }
+
         public ushort GetMessageId()
         {
             return messageId;
@@ -249,6 +259,18 @@ namespace PC2MQTT.MQTT
         public MqttMessage SetMessage(string message)
         {
             this.message = message;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="rawMessage"/> data for this <see cref="MqttMessage"/>.
+        /// </summary>
+        /// <param name="rawMessage"></param>
+        /// <returns></returns>
+        public MqttMessage SetRawMessage(byte[] message)
+        {
+            this.rawMessage = message;
 
             return this;
         }

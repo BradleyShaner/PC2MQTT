@@ -8,9 +8,13 @@ namespace PC2MQTT.MQTT
 
         public ushort GetMessageId();
 
+        public byte[] GetRawMessage();
+
         public string GetTopic();
 
         public void SetMessage(string message);
+
+        public void SetRawMessage(byte[] message);
 
         public void SetMessageId(ushort messageId);
 

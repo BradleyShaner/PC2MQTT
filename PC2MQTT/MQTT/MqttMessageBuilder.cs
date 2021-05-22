@@ -197,6 +197,13 @@ namespace PC2MQTT.MQTT
             return this;
         }
 
+        /// <inheritdoc cref="MqttMessage.SetMessage"/>
+        public MqttMessageBuilder SetRawMessage(byte[] message)
+        {
+            _mqttMessage.SetRawMessage(message);
+            return this;
+        }
+
         /// <inheritdoc cref="MqttMessage.SetMessageType"/>
         public MqttMessageBuilder SetMessageType(MqttMessageType messageType)
         {
