@@ -18,6 +18,7 @@ namespace PC2MQTT
         private static BadLogger.BadLogger Log;
         private static SensorManager sensorManager;
         private static Settings settings = new Settings();
+        private static List<MqttMessage> overflow = new List<MqttMessage>();
 
         protected static void OnExit(object sender, ConsoleCancelEventArgs args)
         {
@@ -57,6 +58,13 @@ namespace PC2MQTT
         {
             Log.Verbose($"Message received for [{mqttMessage.GetTopicWithoutDeviceId()}]: {mqttMessage.message}");
             sensorManager.ProcessMessage(mqttMessage);
+            if (sensorManager == null)
+            {
+                Log.Verbose($"SensorManager not initialized yet, adding to overflow..");
+                overflow.Add(mqttMessage);
+            } else { 
+                sensorManager.ProcessMessage(mqttMessage);
+            }
         }
 
         private static void Client_TopicSubscribed(MqttMessage mqttMessage)
@@ -172,6 +180,14 @@ namespace PC2MQTT
             InitializeMqtt();
 
             InitializeSensors(settings.config.useOnlyBuiltInSensors, roslynLoading);
+
+            // this isn't ideal, but sometimes the mqtt server will send data before sensors
+            // have fully initialized.
+            foreach (var item in overflow)
+            {
+                sensorManager.ProcessMessage(item);
+            }
+
             sensorManager.StartSensors();
 
             Console.CancelKeyPress += new ConsoleCancelEventHandler(OnExit);
