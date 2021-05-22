@@ -15,13 +15,13 @@ namespace PC2MQTT.Sensors
             var baseTopic = $"hermes/audioServer/{baseStation}/playBytes/";
             var satTopic = $"hermes/audioServer/{satellite}/playBytes/";
             var t = mqttMessage.GetRawTopic();
-            if (mqttMessage.GetRawTopic().Contains(baseTopic))
-            {
+
+            if (t.Contains(baseTopic))
                 t = mqttMessage.GetRawTopic().Substring(baseTopic.Length);
-            } else { return; }
+            else
+                return;
 
             sensorHost.Publish(mqttMessage.SetTopic(satTopic).AddTopic(t));
-
 
         }
 
