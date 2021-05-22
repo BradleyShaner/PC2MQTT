@@ -4,6 +4,7 @@ using PC2MQTT.MQTT;
 using PC2MQTT.Sensors;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -56,8 +57,11 @@ namespace PC2MQTT
 
         private static void Client_MessageReceivedString(MqttMessage mqttMessage)
         {
-            Log.Verbose($"Message received for [{mqttMessage.GetTopicWithoutDeviceId()}]: {mqttMessage.message}");
-            sensorManager.ProcessMessage(mqttMessage);
+            Boolean isAscii = mqttMessage.GetRawMessage().All(b => b >= 32 && b <= 127);
+            if (!isAscii & (mqttMessage.GetRawMessage() != null || mqttMessage.GetRawMessage().Length != 0))
+                Log.Verbose($"Message received for [{mqttMessage.GetTopicWithoutDeviceId()}]: RAW Bytes: {mqttMessage.rawMessage.Length}");
+            else
+                Log.Verbose($"Message received for [{mqttMessage.GetTopicWithoutDeviceId()}]: {mqttMessage.message}");
             if (sensorManager == null)
             {
                 Log.Verbose($"SensorManager not initialized yet, adding to overflow..");
