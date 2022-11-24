@@ -34,7 +34,7 @@ namespace PC2MQTT.Sensors
                 DoNotRetain.
                 QueueMessage.
                 Build());
-
+            /*
             while (this.IsInitialized)
             {
                 //Log.Info("If you want, you can stay in control for the life of the sensor using something like this.");
@@ -49,6 +49,7 @@ namespace PC2MQTT.Sensors
                 QueueMessage.
                 Build());
             }
+            */
         }
 
         private void HandleCommand(string[] command, string message)
@@ -56,9 +57,10 @@ namespace PC2MQTT.Sensors
             var args = message;
             Log.Info($"[HandleCommand] Processing [{String.Join("/", command[1..])}] with args [{message}]");
 
-            switch (command[0])
+            switch (command[1])
             {
                 case "shutdown":
+                    sensorHost.Dispose();
                     break;
 
                 case "restart":
@@ -92,6 +94,13 @@ namespace PC2MQTT.Sensors
                     break;
 
                 case "uptime":
+                    break;
+
+                case "activity":
+                    break;
+
+                // list all running programs
+                case "programs":
                     break;
 
                 default:

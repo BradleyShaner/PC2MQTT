@@ -27,7 +27,7 @@ namespace PC2MQTT.Sensors
             this.sensorHost = sensorHost;
 
             Log.Info($"(Initialize) CPU id: {System.Threading.Thread.GetCurrentProcessorId()} ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
-            Log.Info($"IsLinux: {CSScriptLib.Runtime.IsLinux} IsWin: {CSScriptLib.Runtime.IsWin} IsCore: { CSScriptLib.Runtime.IsCore} IsMono: {CSScriptLib.Runtime.IsMono} IsNet: {CSScriptLib.Runtime.IsNet}");
+            Log.Info($"IsWin: {CSScriptLib.Runtime.IsWin} IsCore: { CSScriptLib.Runtime.IsCore}");
 
             // Initialize needs to return true relatively quickly but you can stall for a while or run processor-intensive things beforehand.
             // Control is returned to the sensor in SensorMain after initialization is complete.
@@ -90,8 +90,6 @@ namespace PC2MQTT.Sensors
             // If incompatible with a specific OS/Runtime, set that one below to false and remove all the others that your sensor runs on
             if (CSScriptLib.Runtime.IsCore) compatible = true;
             if (CSScriptLib.Runtime.IsLinux) compatible = true;
-            if (CSScriptLib.Runtime.IsMono) compatible = true;
-            if (CSScriptLib.Runtime.IsNet) compatible = true;
             if (CSScriptLib.Runtime.IsWin) compatible = true;
 
             return compatible;

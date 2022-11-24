@@ -51,7 +51,7 @@ namespace PC2MQTT.Sensors
 
         private TimeSpan GetUpTime()
         {
-            if (CSScriptLib.Runtime.IsLinux || CSScriptLib.Runtime.IsMono)
+            if (CSScriptLib.Runtime.IsLinux)
             {
                 string output = "cat /proc/uptime".LinuxBashResult();
                 var uptime = output.Split(" ");

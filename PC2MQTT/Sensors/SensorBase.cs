@@ -86,8 +86,6 @@ namespace PC2MQTT.Sensors
 
             if (CSScriptLib.Runtime.IsCore) compatible = true;
             if (CSScriptLib.Runtime.IsLinux) compatible = true;
-            if (CSScriptLib.Runtime.IsMono) compatible = true;
-            if (CSScriptLib.Runtime.IsNet) compatible = true;
             if (CSScriptLib.Runtime.IsWin) compatible = true;
 
             return compatible;
